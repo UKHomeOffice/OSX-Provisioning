@@ -1,0 +1,96 @@
+#!/bin/sh
+
+# Created by David Edwards 
+# This script is for MACS that have had a fresh OSX build applied from new or via recovery disk new with a local admin account created.
+# Requires OSX 10.9 or higher.
+
+echo "[I]Warning this script will hide a local admin account, as prompted, and reconfigure this device"
+read -p "Are you sure you want to continue (y/n)?" CONT
+if [ "$CONT" == "y" ]; then
+  
+  
+# Get the settings to be applied 
+read -p "[!] Enter a name for this device: " DEVNAME
+read -p "[!] Enter the Local Admin account that you want to hide: " ACCNAME
+
+while true
+do
+    read -p "Enter Encryption Password: " password
+    echo
+    read -p "Enter Encryption Password (again): " password2
+    echo
+    [ "$password" = "$password2" ] && break
+    echo "Passwords do not match, please try again"
+done
+
+# Apply the settings 
+
+echo "[I] Setting the computer name"
+systemsetup -setcomputername "$DEVNAME"
+
+echo "[I] Hide the local admin account "
+dscl . create /Users/$ACCNAME IsHidden 1
+
+echo "[I] The following command moves the home directory of  hiddenuser to /var, a hidden directory:"
+mv /Users/$ACCNAME /var/$ACCNAME
+
+echo "[I] Set the time zone to London"
+/usr/sbin/systemsetup -settimezone "Europe/London"
+
+# Switch on Apple Remote Desktop
+# TBA
+
+echo "[I] Enable SSH (TBA)"
+systemsetup -setremotelogin on
+
+# Configure Login Window to username and password text fields
+# We might enable this later 
+# /usr/bin/defaults write /Library/Preferences/com.apple.loginwindow SHOWFULLNAME -bool true
+
+echo "[I] Enable admin info at the Login Window"
+/usr/bin/defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+echo "[I] Disable External Accounts at the Login Window"
+/usr/bin/defaults write /Library/Preferences/com.apple.loginwindow EnableExternalAccounts -bool false
+
+# echo "[I] Disable iCloud for logging in users"
+# Deleted as we want users to use a HO specific Icloud account for some things.
+
+# echo "[I]Disable diagnostics"
+# TODO, but this looks like its iset during first boot and is inherited by later users
+
+echo "[I] Disabling password hints on lock screen"
+defaults write com.apple.loginwindow RetriesUntilHint -int 0
+
+echo "[I] Disable Time Machine Popups offering for new disks"
+/usr/bin/defaults write /Library/Preferences/com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+
+# echo "[I] Enabling FileVault2 full disk encryption"
+#removed during VM based testing as its a bit scary
+
+echo "[I] Disabling infrared receiver"
+# Turn off by default, users can re enable this if needed
+defaults write com.apple.driver.AppleIRController DeviceEnabled -bool FALSE
+
+echo "[I] Enabling scheduled updates"
+softwareupdate --schedule on
+
+echo "[I] Enabling password-protected screen lock after 1 minutes"
+systemsetup -setdisplaysleep 1
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+echo "[I] Enabling firewall"
+/usr/libexec/ApplicationFirewall/socketfilterfw --setloggingmode on
+/usr/libexec/ApplicationFirewall/socketfilterfw --setallowsigned on
+/usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+
+echo "[I] **** Finished ****"
+
+else
+  echo "Aborted";
+fi
+
+killall cfprefsd
+
+exit 0

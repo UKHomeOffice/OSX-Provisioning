@@ -66,7 +66,7 @@ echo "[I] Disable Time Machine Popups offering for new disks"
 /usr/bin/defaults write /Library/Preferences/com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 # echo "[I] Enabling FileVault2 full disk encryption"
-#removed during VM based testing as its a bit scary
+# fdesetup enable -institutional $password
 
 echo "[I] Disabling infrared receiver"
 # Turn off by default, users can re enable this if needed

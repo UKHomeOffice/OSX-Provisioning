@@ -85,6 +85,15 @@ echo "[I] Enabling firewall"
 /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsigned on
 /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
 
+echo "[I] Launching firmware password utility (this may take a moment)"
+diskutil mount Recovery\ HD
+RECOVERY=$(hdiutil attach /Volumes/Recovery\ HD/com.apple.recovery.boot/BaseSystem.dmg | grep -i Base | cut -f 3)
+open "$RECOVERY/Applications/Utilities/Firmware Password Utility.app"
+echo "[!] Follow the prompts on the utility to set a strong unique firmware password"
+echo "[!] Press enter when done"
+read DONE
+
+
 echo "[I] **** Finished ****"
 
 else

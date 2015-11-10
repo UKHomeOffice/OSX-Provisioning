@@ -56,7 +56,7 @@ echo "[I] Disable Time Machine Popups offering for new disks"
 /usr/bin/defaults write /Library/Preferences/com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 echo "[I] Enabling FileVault2 full disk encryption"
-fdesetup enable user $ACCNAME
+fdesetup enable -user $ACCNAME
 
 echo "[I] Disabling infrared receiver"
 # Turn off by default, users can re enable this if needed
@@ -64,9 +64,13 @@ defaults write com.apple.driver.AppleIRController DeviceEnabled -bool FALSE
 
 echo "[I] Enabling scheduled updates"
 softwareupdate --schedule on
+defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled -bool true
+defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticDownload -bool true
+defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdateRestartRequired -bool true
+defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdate -bool true
 
-echo "[I] Enabling password-protected screen lock after 1 minutes"
-systemsetup -setdisplaysleep 1
+echo "[I] Enabling password-protected screen lock after 5 minutes"
+systemsetup -setdisplaysleep 5
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 

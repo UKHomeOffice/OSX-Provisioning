@@ -4,14 +4,14 @@
 # This script is for MACS that have had a fresh OSX build applied from new or via recovery disk new with a local admin account created.
 # Requires OSX 10.9 or higher.
 
-echo "[I]Warning this script will hide a local admin account, as prompted, and reconfigure this device"
+echo "[I]Warning this script will hide the local admin account and reconfigure this device including enabling encryption. Please make a note of the encryption key"
 read -p "Are you sure you want to continue (y/n)?" CONT
 if [ "$CONT" == "y" ]; then
   
   
 # Get the settings to be applied 
 read -p "[!] Enter a name for this device: " DEVNAME
-read -p "[!] Enter the username to Hide the Local admin and Enable Encryption: " ACCNAME
+read -p "[!] Enter the username of the Local admin account: " ACCNAME
 
 # Apply the settings 
 

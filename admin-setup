@@ -11,17 +11,7 @@ if [ "$CONT" == "y" ]; then
   
 # Get the settings to be applied 
 read -p "[!] Enter a name for this device: " DEVNAME
-read -p "[!] Enter the Local Admin account that you want to hide: " ACCNAME
-
-while true
-do
-    read -p "Enter Encryption Password: " password
-    echo
-    read -p "Enter Encryption Password (again): " password2
-    echo
-    [ "$password" = "$password2" ] && break
-    echo "Passwords do not match, please try again"
-done
+read -p "[!] Enter the username to Hide the Local admin and Enable Encryption: " ACCNAME
 
 # Apply the settings 
 
@@ -57,7 +47,7 @@ echo "[I] Disable External Accounts at the Login Window"
 # Deleted as we want users to use a HO specific Icloud account for some things.
 
 # echo "[I]Disable diagnostics"
-# TODO, but this looks like its iset during first boot and is inherited by later users
+# TODO, but this looks like its is set during first boot and is inherited by later users
 
 echo "[I] Disabling password hints on lock screen"
 defaults write com.apple.loginwindow RetriesUntilHint -int 0
@@ -65,8 +55,8 @@ defaults write com.apple.loginwindow RetriesUntilHint -int 0
 echo "[I] Disable Time Machine Popups offering for new disks"
 /usr/bin/defaults write /Library/Preferences/com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
-# echo "[I] Enabling FileVault2 full disk encryption"
-fdesetup enable 
+echo "[I] Enabling FileVault2 full disk encryption"
+fdesetup enable user $ACCNAME
 
 echo "[I] Disabling infrared receiver"
 # Turn off by default, users can re enable this if needed

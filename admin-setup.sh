@@ -4,7 +4,7 @@
 # This script is for MACS that have had a fresh OSX build applied from new or via recovery disk new with a local admin account created.
 # Requires OSX 10.9 or higher.
 
-echo "[I]Warning this script will hide the local admin account and reconfigure this device including enabling encryption. Please make a note of the encryption key"
+echo "[I]PREREQUISITS: You need to be logged on as a local admin account. This script will hide the local admin account and reconfigure this computer including enabling encryption. Please make a note of the encryption key"
 read -p "Are you sure you want to continue (y/n)?" CONT
 if [ "$CONT" == "y" ]; then
   

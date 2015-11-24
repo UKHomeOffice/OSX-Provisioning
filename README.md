@@ -6,6 +6,6 @@ This script is designed to be run on a mac that is brand new, or had been rebuil
 
 This will apply a number of security hardening settings, including applying full disk encryption wiht file vault. PLEASE make sure you make a note of the key that is shown on screen during this script running.
 
-**byod-check.sh*
+**byod-check.sh**
 This script, must be run as admin, and will check to see if a device has the required security applied. It does not change settings, only reports on them.
 
